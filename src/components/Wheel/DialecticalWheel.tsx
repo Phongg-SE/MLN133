@@ -104,7 +104,6 @@ export const DialecticalWheel: React.FC<DialecticalWheelProps> = ({
     const sectorAngle = 360 / 8; // 45 degrees per sector
 
     // Calculate rotation angle so target sector lands at pointer top (0 deg)
-    // Sector 0 is 0-45 deg. Pointer is at 0 deg top.
     const fullSpins = 5 + Math.floor(Math.random() * 3); // 5 to 7 full rotations
     const targetAngle = fullSpins * 360 + (360 - targetSectorIdx * sectorAngle - sectorAngle / 2);
 
@@ -178,9 +177,9 @@ export const DialecticalWheel: React.FC<DialecticalWheelProps> = ({
                       textAnchor="middle"
                       dy="-4"
                       fill="#FFF8DC"
-                      fontSize="10"
+                      fontSize="9.5"
                       fontWeight="700"
-                      fontFamily="Cinzel"
+                      fontFamily="Be Vietnam Pro, sans-serif"
                     >
                       {sector.label}
                     </text>

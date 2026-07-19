@@ -34,7 +34,7 @@ export const SAMPLE_LUCKY_CARDS: CardItem[] = [
   },
   {
     id: 'card2',
-    title: 'Độ Phá Tri Thức',
+    title: 'Đột Phá Tri Thức',
     subtitle: 'Lượng biến đổi Chất',
     description: 'Thưởng ngay +40 điểm XP kinh nghiệm lý luận.',
     type: 'special',
@@ -429,7 +429,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
                       setPanelState('welcome');
                     }}
                   >
-                    DUY THÙY TÀN DƯ (-15 HP)
+                    DUY TRÌ TÀN DƯ (-15 HP)
                   </GameButton>
                 </div>
               </motion.div>
