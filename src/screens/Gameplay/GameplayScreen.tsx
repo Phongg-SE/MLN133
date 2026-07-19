@@ -10,7 +10,7 @@ import { GuideModal } from '../../components/Modal/GuideModal';
 import { QuestionService } from '../../services/QuestionService';
 import type { Question } from '../../data/questions';
 import { AudioService } from '../../services/AudioService';
-import { Sparkles, CheckCircle2, XCircle, AlertTriangle, ArrowRight, Eye, Shield, Zap } from 'lucide-react';
+import { Sparkles, CheckCircle2, XCircle, AlertTriangle, ArrowRight, Eye, Shield, Zap, UserCheck } from 'lucide-react';
 import './GameplayScreen.css';
 
 export interface GameplayScreenProps {
@@ -51,90 +51,21 @@ export interface CrisisScenario {
 export const CRISIS_EVENTS_LIST: CrisisScenario[] = [
   {
     id: 1,
-    title: '⚠️ THỬ THÁCH MÂU THUẪN PHƯƠNG THỨC SẢN XUẤT',
-    dilemma: 'Phương thức sản xuất cũ xuất hiện mâu thuẫn đối kháng giữa Lực lượng sản xuất mới và Quan hệ sản xuất bất cập!',
+    title: '⚠️ KHỦNG HOẢNG MÂU THUẪN PHƯƠNG THỨC SẢN XUẤT',
+    dilemma: 'Tại Đông Dương Quốc, quan hệ sản xuất cũ bất cập cản trở lực lượng sản xuất mới bứt phá!',
     option1: {
-      label: 'CẢI CÁCH TIẾN BỘ',
+      label: 'CẢI CÁCH PHƯƠNG THỨC SẢN XUẤT TIẾN BỘ',
       outcomeTitle: '✅ CẢI CÁCH TIẾN BỘ THÀNH CÔNG',
-      outcomeText: 'Nhờ giải quyết mâu thuẫn theo quy luật biện chứng, bạn đã mở đường cho lực lượng sản xuất phát triển bứt phá!',
-      effectText: '+15 XP Tri thức',
+      outcomeText: 'Vận dụng đúng quy luật mâu thuẫn biện chứng, mở đường cho lực lượng sản xuất bứt phá!',
+      effectText: '+30 XP Tri thức',
       isSuccess: true,
-      xpDelta: 15,
+      xpDelta: 30,
       hpDelta: 0,
     },
     option2: {
-      label: 'DUY TRÌ TÀN DƯ',
-      outcomeTitle: '❌ BẢO THỦ TÀN DƯ GÂY TỔN HẠI',
-      outcomeText: 'Níu kéo quan hệ sản xuất cũ làm nảy sinh mâu thuẫn trịch thượng, gây cản trở sự phát triển!',
-      effectText: '-15 HP Sinh lực',
-      isSuccess: false,
-      xpDelta: 0,
-      hpDelta: -15,
-    },
-  },
-  {
-    id: 2,
-    title: '⚠️ KHỦNG HOẢNG TƯ TƯỞNG TỰ PHÁT',
-    dilemma: 'Phong trào đấu tranh của công nhân bùng nổ rầm rộ nhưng còn mang tính tự phát, thiếu hệ thống lý luận soi đường!',
-    option1: {
-      label: 'TRANG BỊ LÝ LUẬN MÁC-LÊNIN',
-      outcomeTitle: '✅ GIẢI PHÁP TIÊN PHONG CHÍNH XÁC',
-      outcomeText: 'Lý luận khoa học giúp phong trào chuyển biến từ tự phát sang tự giác, nâng cao bản lĩnh chiến đấu!',
-      effectText: '+15 XP Tri thức',
-      isSuccess: true,
-      xpDelta: 15,
-      hpDelta: 0,
-    },
-    option2: {
-      label: 'ĐỂ PHONG TRÀO TỰ TÚC',
-      outcomeTitle: '❌ THẤT BẠI DO THIẾU ĐỊNH HƯỚNG',
-      outcomeText: 'Thiếu đội tiên phong và lý luận dẫn đường khiến phong trào dễ bị chia rẽ và tổn thất lực lượng!',
-      effectText: '-15 HP Sinh lực',
-      isSuccess: false,
-      xpDelta: 0,
-      hpDelta: -15,
-    },
-  },
-  {
-    id: 3,
-    title: '⚠️ THỬ THÁCH LIÊN MINH GIAI CẤP',
-    dilemma: 'Xuất hiện nguy cơ rạn nứt khối đại đoàn kết giữa Giai cấp Công nhân và Giai cấp Nông dân trong xây dựng kinh tế!',
-    option1: {
-      label: 'TĂNG CƯỜNG LIÊN MINH CÔNG - NÔNG',
-      outcomeTitle: '✅ CỦNG CỐ KHỐI ĐẠI ĐOÀN KẾT',
-      outcomeText: 'Gắn kết lợi ích kinh tế công - nông giúp tạo nên nền tảng chính trị - xã hội vững chắc!',
-      effectText: '+15 XP Tri thức',
-      isSuccess: true,
-      xpDelta: 15,
-      hpDelta: 0,
-    },
-    option2: {
-      label: 'ÁP ĐẶT MỘT PHÍA',
-      outcomeTitle: '❌ RẠN NỨT KHỐI LIÊN MINH',
-      outcomeText: 'Vi phạm nguyên tắc hài hòa lợi ích làm suy giảm niềm tin và suy yếu khối đại đoàn kết toàn dân!',
-      effectText: '-15 HP Sinh lực',
-      isSuccess: false,
-      xpDelta: 0,
-      hpDelta: -15,
-    },
-  },
-  {
-    id: 4,
-    title: '⚠️ THÁCH THỨC DÂN TỘC & TÔN GIÁO',
-    dilemma: 'Các thế lực phản động âm mưu lợi dụng vấn đề sắc tộc và tôn giáo để kích động chia rẽ nhân dân!',
-    option1: {
-      label: 'THỰC HIỆN BÌNH ĐẲNG, ĐOÀN KẾT DÂN TỘC',
-      outcomeTitle: '✅ BẢO VỆ KHỐI ĐẠI ĐOÀN KẾT DÂN TỘC',
-      outcomeText: 'Chính sách dân tộc tôn trọng, bình đẳng, giúp đỡ nhau cùng phát triển đã đập tan âm mưu chia rẽ!',
-      effectText: '+20 XP Tri thức',
-      isSuccess: true,
-      xpDelta: 20,
-      hpDelta: 0,
-    },
-    option2: {
-      label: 'ĐỒNG HÓA CƯỠNG BỨC',
-      outcomeTitle: '❌ BẤT ỔN SẮC TỘC NÂY SINH',
-      outcomeText: 'Đồng hóa cưỡng bức vi phạm nguyên tắc bình đẳng dân tộc, gây nên nguy cơ mâu thuẫn xã hội gay gắt!',
+      label: 'DUY TRÌ TÀN DƯ CŨ',
+      outcomeTitle: '❌ NÍU KÉO BẢO THỦ GÂY TỔN HẠI',
+      outcomeText: 'Níu kéo mô hình cũ làm nảy sinh mâu thuẫn gay gắt, làm suy yếu ổn định xã hội!',
       effectText: '-20 HP Sinh lực',
       isSuccess: false,
       xpDelta: 0,
@@ -142,45 +73,45 @@ export const CRISIS_EVENTS_LIST: CrisisScenario[] = [
     },
   },
   {
-    id: 5,
-    title: '⚠️ BIẾN ĐỔI GIA ĐÌNH TRONG KINH TẾ THỊ TRƯỜNG',
-    dilemma: 'Mặt trái của kinh tế thị trường gây áp lực lớn, đứng trước nguy cơ gia tăng ly hôn và phai nhạt tình cảm gia đình!',
+    id: 2,
+    title: '⚠️ KHỦNG HOẢNG TƯ TƯỞNG TỰ PHÁT',
+    dilemma: 'Phong trào quần chúng nổ ra tự phát, chưa có hệ thống lý luận Mác - Lênin soi đường!',
     option1: {
-      label: 'XÂY DỰNG GIA ĐÌNH VĂN MINH, HẠNH PHÚC',
-      outcomeTitle: '✅ NÂNG CAO GIÁ TRỊ GIA ĐÌNH XHCN',
-      outcomeText: 'Kết hợp truyền thống hiếu thảo với tinh thần dân chủ hiện đại giúp xây dựng gia đình no ấm, tiến bộ!',
-      effectText: '+15 XP Tri thức',
+      label: 'TRANG BỊ LÝ LUẬN KHOA HỌC',
+      outcomeTitle: '✅ GIẢI PHÁP TIÊN PHONG CHÍNH XÁC',
+      outcomeText: 'Lý luận khoa học giúp phong trào chuyển từ tự phát sang tự giác, nâng cao bản lĩnh!',
+      effectText: '+30 XP Tri thức',
       isSuccess: true,
-      xpDelta: 15,
+      xpDelta: 30,
       hpDelta: 0,
     },
     option2: {
-      label: 'XEM XÂY DỰNG GIA ĐÌNH LÀ VIỆC RIÊNG',
-      outcomeTitle: '❌ PHAI NHẠT TÌNH CẢM GIA ĐÌNH',
-      outcomeText: 'Buông lỏng công tác giáo dục và chính sách an sinh làm phai nhạt nền tảng văn hóa gia đình!',
-      effectText: '-15 HP Sinh lực',
+      label: 'ĐỂ PHONG TRÀO TỰ TÚC',
+      outcomeTitle: '❌ THẤT BẠI DO THIẾU ĐỊNH HƯỚNG',
+      outcomeText: 'Thiếu đội tiên phong và lý luận dẫn đường khiến phong trào tổn thất lực lượng!',
+      effectText: '-20 HP Sinh lực',
       isSuccess: false,
       xpDelta: 0,
-      hpDelta: -15,
+      hpDelta: -20,
     },
   },
   {
-    id: 6,
-    title: '⚠️ THỬ THÁCH THỜI KỲ QUÁ ĐỘ BỎ QUA TBCN',
-    dilemma: 'Đất nước trong thời kỳ quá độ đứng trước nguy cơ đóng cửa cô lập hoặc tiếp thu thành tựu văn minh nhân loại!',
+    id: 3,
+    title: '⚠️ THỬ THÁCH LIÊN MINH GIAI CẤP',
+    dilemma: 'Nguy cơ rạn nứt khối đại đoàn kết giữa Giai cấp Công nhân và Giai cấp Nông dân!',
     option1: {
-      label: 'KẾ THỪA THÀNH TỰU KHOA HỌC NHÂN LOẠI',
-      outcomeTitle: '✅ ĐỘT PHÁ PHÁT TRIỂN NỀN KINH TẾ',
-      outcomeText: 'Bỏ qua sự thống trị TBCN nhưng chủ động tiếp thu thành tựu khoa học công nghệ giúp tăng tốc hiện đại hóa!',
-      effectText: '+20 XP Tri thức',
+      label: 'TĂNG CƯỜNG LIÊN MINH CÔNG - NÔNG - TRÍ',
+      outcomeTitle: '✅ CỦNG CỐ KHỐI ĐẠI ĐOÀN KẾT',
+      outcomeText: 'Gắn kết lợi ích kinh tế công - nông - trí tạo nên nền tảng chính trị - xã hội vững chắc!',
+      effectText: '+30 XP Tri thức',
       isSuccess: true,
-      xpDelta: 20,
+      xpDelta: 30,
       hpDelta: 0,
     },
     option2: {
-      label: 'BÀI TRỪ CÔ LẬP NỀN KINH TẾ',
-      outcomeTitle: '❌ NỀN KINH TẾ TRÌ TRỆ',
-      outcomeText: 'Từ bỏ việc tiếp thu thành tựu công nghệ làm cho lực lượng sản xuất chậm phát triển và tụt hậu!',
+      label: 'ÁP ĐẶT MỘT PHÍA',
+      outcomeTitle: '❌ RẠN NỨT KHỐI LIÊN MINH',
+      outcomeText: 'Vi phạm nguyên tắc hài hòa lợi ích làm suy giảm niềm tin toàn dân!',
       effectText: '-20 HP Sinh lực',
       isSuccess: false,
       xpDelta: 0,
@@ -193,29 +124,29 @@ export const SAMPLE_LUCKY_CARDS: CardItem[] = [
   {
     id: 'card1',
     title: 'Hồi Phục Sinh Lực',
-    subtitle: 'Năng lượng Biện chứng',
-    description: 'Hồi ngay +20 điểm HP sinh lực cho người chơi.',
+    subtitle: 'Ổn định Xã hội (HP)',
+    description: 'Hồi ngay +25 điểm HP sinh lực cho Đông Dương Quốc.',
     type: 'buff',
     icon: <Shield size={32} color="#66BB6A" />,
-    valueEffect: '+20 HP',
+    valueEffect: '+25 HP',
   },
   {
     id: 'card2',
-    title: 'Tích Lũy Tri Thức',
-    subtitle: 'Lượng biến đổi Chất',
-    description: 'Thưởng nhẹ +15 điểm XP kinh nghiệm lý luận.',
+    title: 'Giác Ngộ Tri Thức',
+    subtitle: 'Điểm Giác Ngộ (XP)',
+    description: 'Thưởng ngay +30 điểm XP kinh nghiệm lý luận.',
     type: 'special',
     icon: <Zap size={32} color="#FFD700" />,
-    valueEffect: '+15 XP',
+    valueEffect: '+30 XP',
   },
   {
     id: 'card3',
-    title: 'Kế Thừa Tiến Bộ',
-    subtitle: 'Phủ định của Phủ định',
-    description: 'Tặng 1 thẻ Gợi ý 50/50 vào khay vật phẩm.',
+    title: 'Kiên Định Tư Tưởng',
+    subtitle: 'Khiên Chặn HP (Passive)',
+    description: 'Tặng 1 thẻ Kiên Định Tư Tưởng phòng vệ vào khay vật phẩm.',
     type: 'buff',
     icon: <Eye size={32} color="#00E5FF" />,
-    valueEffect: '+1 ITEM',
+    valueEffect: '+1 THẺ KHIÊN',
   },
 ];
 
@@ -227,13 +158,16 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
   isAudioMuted,
   onToggleAudio,
 }) => {
+  // GDD Level Target XP & Timer Configuration
+  const levelMeta = QuestionService.getLevelMetadata(level);
+  const maxXp = levelMeta.targetXp; // 300 (Lvl 1), 600 (Lvl 2), 1000 (Lvl 3)
+  const baseTimer = levelMeta.timerPerQ * 5; // Total countdown per level session
+
   // Game Stats
   const [hp, setHp] = useState<number>(100);
   const maxHp = 100;
   const [xp, setXp] = useState<number>(0);
-  const maxXp = 100;
-  const [timer, setTimer] = useState<number>(120);
-  const maxTimer = 120;
+  const [timer, setTimer] = useState<number>(baseTimer);
   const [score, setScore] = useState<number>(0);
 
   // Pause State & Modals
@@ -249,6 +183,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     isCorrect: boolean;
     correctAnswer: number;
     explanation: string;
+    advisor?: string;
   } | null>(null);
 
   // Crisis Scenario & Outcome State
@@ -263,15 +198,12 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
   // Cards State
   const [flippedCardIdx, setFlippedCardIdx] = useState<number | null>(null);
 
-  // Inventory State
+  // Inventory & Card Active Statuses
   const [inventory, setInventory] = useState<InventoryItem[]>(DEFAULT_INVENTORY_ITEMS);
   const [active5050, setActive5050] = useState<boolean>(false);
-  const [activeShield, setActiveShield] = useState<boolean>(false);
   const [activeDoubleXp, setActiveDoubleXp] = useState<boolean>(false);
 
-  const chapterTitle = QuestionService.getChapterName(level);
-
-  // Pause Countdown Timer when paused or answering / viewing popup (ONLY run when panelState === 'welcome' and !isPaused)
+  // Countdown Timer Effect (Only run when panelState === 'welcome' and !isPaused)
   useEffect(() => {
     if (panelState !== 'welcome' || isPaused) return;
 
@@ -308,7 +240,6 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     } else if (sector.type === 'lucky') {
       setPanelState('lucky');
     } else if (sector.type === 'crisis') {
-      // Pick a random crisis scenario from CRISIS_EVENTS_LIST
       const randomCrisis = CRISIS_EVENTS_LIST[Math.floor(Math.random() * CRISIS_EVENTS_LIST.length)];
       setCurrentCrisis(randomCrisis);
       setPanelState('crisis');
@@ -325,10 +256,11 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
     if (result.isCorrect) {
       AudioService.playCorrect();
-      const xpEarned = activeDoubleXp ? 50 : 25;
+      // GDD Card "Liên minh Công - Nông": xpMultiplier = 2 (+100 XP or +200 XP)
+      const xpEarned = activeDoubleXp ? 100 : 50;
       const newXp = xp + xpEarned;
       setXp(newXp);
-      setScore((prev) => prev + 100);
+      setScore((prev) => prev + (activeDoubleXp ? 200 : 100));
       setActiveDoubleXp(false);
 
       if (newXp >= maxXp) {
@@ -338,8 +270,15 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
       }
     } else {
       AudioService.playWrong();
-      if (activeShield) {
-        setActiveShield(false);
+      // GDD Card "Kiên định tư tưởng": Passive Shield blocks HP loss!
+      const kienDinhCard = inventory.find((item) => item.id === 'kienDinhTuTuong');
+      if (kienDinhCard && kienDinhCard.count > 0) {
+        // Consume 1 passive shield card to block HP loss (HP -= 0)
+        setInventory((prev) =>
+          prev.map((item) =>
+            item.id === 'kienDinhTuTuong' ? { ...item, count: item.count - 1 } : item
+          )
+        );
       } else {
         const newHp = Math.max(hp - 20, 0);
         setHp(newHp);
@@ -359,9 +298,9 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     const card = SAMPLE_LUCKY_CARDS[index];
 
     if (card.id === 'card1') {
-      setHp((prev) => Math.min(prev + 20, maxHp));
+      setHp((prev) => Math.min(prev + 25, maxHp));
     } else if (card.id === 'card2') {
-      const newXp = xp + 15;
+      const newXp = xp + 30;
       setXp(newXp);
       if (newXp >= maxXp) {
         setTimeout(() => {
@@ -371,7 +310,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     } else if (card.id === 'card3') {
       setInventory((prev) =>
         prev.map((item) =>
-          item.id === 'hint5050' ? { ...item, count: item.count + 1 } : item
+          item.id === 'kienDinhTuTuong' ? { ...item, count: item.count + 1 } : item
         )
       );
     }
@@ -400,12 +339,25 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
       }
     } else {
       AudioService.playWrong();
-      const newHp = Math.max(hp + choiceData.hpDelta, 0);
+      // Check passive shield for crisis penalty
+      const kienDinhCard = inventory.find((item) => item.id === 'kienDinhTuTuong');
+      let actualHpDelta = choiceData.hpDelta;
+
+      if (kienDinhCard && kienDinhCard.count > 0 && actualHpDelta < 0) {
+        actualHpDelta = 0; // Block HP loss
+        setInventory((prev) =>
+          prev.map((item) =>
+            item.id === 'kienDinhTuTuong' ? { ...item, count: item.count - 1 } : item
+          )
+        );
+      }
+
+      const newHp = Math.max(hp + actualHpDelta, 0);
       setHp(newHp);
       setCrisisOutcome({
         title: choiceData.outcomeTitle,
         text: choiceData.outcomeText,
-        effectText: choiceData.effectText,
+        effectText: actualHpDelta === 0 ? '🛡️ THẺ KIÊN ĐỊNH TƯ TƯỞNG ĐÃ CHẶN TRỪ HP!' : choiceData.effectText,
         isSuccess: false,
       });
 
@@ -419,11 +371,13 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
   // Use Item from Inventory
   const handleUseItem = (itemId: string) => {
-    if (itemId === 'hint5050' && panelState === 'question' && currentQuestion) {
+    if (itemId === 'giacNgoLyLuan' && panelState === 'question' && currentQuestion) {
       setActive5050(true);
-    } else if (itemId === 'hpShield') {
-      setActiveShield(true);
-    } else if (itemId === 'doubleXp') {
+    } else if (itemId === 'keHoachHoa') {
+      // GDD Card "Kế hoạch hóa tập trung": timer += 10s
+      setTimer((prev) => prev + 10);
+    } else if (itemId === 'lienMinhCongNong') {
+      // GDD Card "Liên minh Công - Nông": xpMultiplier = 2
       setActiveDoubleXp(true);
     }
 
@@ -443,9 +397,9 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
         xp={xp}
         maxXp={maxXp}
         timer={timer}
-        maxTimer={maxTimer}
+        maxTimer={baseTimer}
         level={level}
-        chapterTitle={chapterTitle}
+        chapterTitle={levelMeta.name}
         score={score}
         onHomeClick={onHomeClick}
         onPauseClick={() => setIsPaused(true)}
@@ -455,7 +409,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
       {/* Main Center Area */}
       <main className="gameplay-main">
-        {/* Left Panel: Dialectical Wheel - ONLY enabled when panelState is 'welcome' and !isPaused */}
+        {/* Left Panel: Dialectical Wheel */}
         <section className="gameplay-wheel-section">
           <DialecticalWheel
             onSpinComplete={handleSpinComplete}
@@ -478,13 +432,11 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 <div className="dynamic-panel__icon-ring">
                   <Sparkles size={48} color="#FFD700" />
                 </div>
-                <h2>SẴN SÀNG QUAY VÒNG QUAY BIỆN CHỨNG</h2>
+                <h2>CHÈO LÁI ĐÔNG DƯƠNG QUỐC — MÀN {level}</h2>
                 <p>
-                  Nhấn nút <strong>QUAY BIỆN CHỨNG</strong> phía bên trái để kích hoạt các quy luật lý luận,
-                  trả lời câu hỏi và tích lũy 100 XP để hoàn thành Màn {level}!
+                  Nhấn <strong>QUAY BIỆN CHỨNG</strong> phía bên trái để kích hoạt các sự kiện lý luận và tích lũy đủ <strong>{maxXp} XP Điểm Giác Ngộ</strong> để chiến thắng Màn {level}!
                 </p>
-                {activeShield && <div className="active-buff-badge">🛡️ KHIÊN BIỆN CHỨNG ĐANG KÍCH HOẠT</div>}
-                {activeDoubleXp && <div className="active-buff-badge">⚡ NHÂN 2 XP ĐANG KÍCH HOẠT</div>}
+                {activeDoubleXp && <div className="active-buff-badge">⚡ LIÊN MINH CÔNG - NÔNG: NHÂN 2 XP (x2) ĐANG KÍCH HOẠT</div>}
               </motion.div>
             )}
 
@@ -499,7 +451,11 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
               >
                 <div className="question-header">
                   <span className="question-category">{currentQuestion.category}</span>
-                  <span className="question-number font-number">Câu hỏi #{currentQuestion.id}</span>
+                  {currentQuestion.advisor && (
+                    <span className="question-advisor font-number">
+                      <UserCheck size={14} color="#FFD700" /> Cố vấn: {currentQuestion.advisor}
+                    </span>
+                  )}
                 </div>
 
                 <h3 className="question-text">{currentQuestion.question}</h3>
@@ -584,7 +540,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 exit={{ opacity: 0, scale: 0.9 }}
               >
                 <h3>🃏 THẺ MAY MẮN BIỆN CHỨNG</h3>
-                <p>Hãy chọn lật 1 trong 3 lá bài để nhận hiệu ứng và phần thưởng tri thức!</p>
+                <p>Hãy chọn lật 1 trong 3 lá bài để bổ sung vào khay vật phẩm chiến thuật của bạn!</p>
 
                 <div className="lucky-cards-grid">
                   {SAMPLE_LUCKY_CARDS.map((card, idx) => (
@@ -616,7 +572,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
               </motion.div>
             )}
 
-            {/* CRISIS EVENT PANEL (Randomized Scenarios) */}
+            {/* CRISIS EVENT PANEL */}
             {panelState === 'crisis' && (
               <motion.div
                 key="crisis"

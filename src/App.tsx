@@ -23,7 +23,7 @@ export const App: React.FC = () => {
     hpLeft: number;
     stars: number;
   }>({
-    xpGained: 100,
+    xpGained: 300,
     hpLeft: 80,
     stars: 3,
   });
@@ -94,7 +94,8 @@ export const App: React.FC = () => {
         <VictoryScreen
           level={selectedLevel}
           stats={victoryStats}
-          onNextLevel={() => handleSelectLevel(Math.min(selectedLevel + 1, 7))}
+          onNextLevel={() => handleSelectLevel(Math.min(selectedLevel + 1, 3))}
+          onRetry={() => setCurrentScreen('gameplay')}
           onHomeClick={() => setCurrentScreen('menu')}
         />
       )}

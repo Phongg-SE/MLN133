@@ -16,67 +16,39 @@ export interface MapNode {
   level: number;
   name: string;
   subName: string;
+  targetXp: number;
+  timerPerQ: number;
   x: number;
   y: number;
-  iconName: string;
 }
 
 export const MAP_NODES: MapNode[] = [
   {
     level: 1,
-    name: 'NHÀ MÁY BÀN ĐẠP',
-    subName: 'Chương 1: Nhập môn CNXH Khoa học',
-    x: 15,
-    y: 75,
-    iconName: 'factory',
+    name: 'CÔNG XƯỞNG THẾ KỶ XIX',
+    subName: 'Chương 1 & 2: Nhập môn CNXH Khoa học & Sứ mệnh Giai cấp Công nhân',
+    targetXp: 300,
+    timerPerQ: 30,
+    x: 22,
+    y: 65,
   },
   {
     level: 2,
-    name: 'THỦ ĐÔ CÔNG NHÂN',
-    subName: 'Chương 2: Sứ mệnh Giai cấp Công nhân',
-    x: 28,
-    y: 45,
-    iconName: 'capital',
+    name: 'NGHỊ TRƯỜNG CÁCH MẠNG',
+    subName: 'Chương 3 & 4: CNXH & Thời kỳ Quá độ, Dân chủ & Nhà nước XHCN',
+    targetXp: 600,
+    timerPerQ: 20,
+    x: 50,
+    y: 40,
   },
   {
     level: 3,
-    name: 'QUẢNG TRƯỜNG QUÁ ĐỘ',
-    subName: 'Chương 3: CNXH & Thời kỳ Quá độ',
-    x: 42,
-    y: 70,
-    iconName: 'soviet',
-  },
-  {
-    level: 4,
-    name: 'ĐẠI ĐIỆN DÂN CHỦ',
-    subName: 'Chương 4: Dân chủ & Nhà nước XHCN',
-    x: 58,
-    y: 35,
-    iconName: 'democracy',
-  },
-  {
-    level: 5,
-    name: 'LIÊN MINH PHÁT TRIỂN',
-    subName: 'Chương 5: Cơ cấu Xã hội - Giai cấp',
-    x: 70,
+    name: 'BẢN LÀNG & MÁI ẤM HIỆN ĐẠI',
+    subName: 'Chương 5, 6 & 7: Cơ cấu Xã hội, Dân tộc, Tôn giáo & Gia đình',
+    targetXp: 1000,
+    timerPerQ: 15,
+    x: 78,
     y: 65,
-    iconName: 'union',
-  },
-  {
-    level: 6,
-    name: 'VÙNG ĐẤT DÂN TỘC',
-    subName: 'Chương 6: Vấn đề Dân tộc & Tôn giáo',
-    x: 82,
-    y: 38,
-    iconName: 'federation',
-  },
-  {
-    level: 7,
-    name: 'MÔI TRƯỜNG GIA ĐÌNH',
-    subName: 'Chương 7: Vấn đề Gia đình XHCN',
-    x: 90,
-    y: 72,
-    iconName: 'family',
   },
 ];
 
@@ -101,12 +73,12 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
 
         <div className="level-select-title-wrap">
           <Compass size={24} color="#FFD700" />
-          <h2>BẢN ĐỒ CHIẾN LƯỢC BIỆN CHỨNG</h2>
+          <h2>BẢN ĐỒ CHIẾN LƯỢC ĐÔNG DƯƠNG QUỐC</h2>
         </div>
 
         <div className="level-select-stats font-number">
           <Shield size={18} color="#FFD700" />
-          <span>HOÀN THÀNH: {completedLevels.length} / 7 MÀN</span>
+          <span>TIẾN TRÌNH: {completedLevels.length} / 3 MÀN CHƠI</span>
         </div>
       </div>
 
@@ -126,8 +98,8 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
                 x2={`${nextNode.x}%`}
                 y2={`${nextNode.y}%`}
                 stroke={isPathUnlocked ? '#FFD700' : 'rgba(212, 175, 55, 0.25)'}
-                strokeWidth={isPathUnlocked ? '3' : '2'}
-                strokeDasharray={isPathUnlocked ? 'none' : '6 6'}
+                strokeWidth={isPathUnlocked ? '4' : '2'}
+                strokeDasharray={isPathUnlocked ? 'none' : '8 8'}
               />
             );
           })}
@@ -158,11 +130,11 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
                 {/* Node Icon/Badge */}
                 <div className="map-node__badge">
                   {isCompleted ? (
-                    <Flag size={22} color="#4CAF50" />
+                    <Flag size={24} color="#4CAF50" />
                   ) : isUnlocked ? (
-                    <MapPin size={22} color="#FFD700" />
+                    <MapPin size={24} color="#FFD700" />
                   ) : (
-                    <Lock size={20} color="#78909C" />
+                    <Lock size={22} color="#78909C" />
                   )}
                   <span className="map-node__number font-number">{node.level}</span>
                 </div>
@@ -190,11 +162,14 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
               <div className="map-node__tooltip glass-panel">
                 <strong>{node.name}</strong>
                 <p>{node.subName}</p>
+                <div className="map-node__tooltip-target font-number">
+                  🎯 Yêu cầu: {node.targetXp} XP | ⏱️ {node.timerPerQ}s/câu
+                </div>
                 <div className="map-node__tooltip-status">
                   {isCompleted
                     ? '✓ ĐÃ HOÀN THÀNH'
                     : isUnlocked
-                    ? '▶ NHẤP ĐỂ BẮT ĐẦU'
+                    ? '▶ NHẤP ĐỂ CHÈO LÁI MÀN CHƠI'
                     : '🔒 CHƯA MỞ KHÓA'}
                 </div>
               </div>

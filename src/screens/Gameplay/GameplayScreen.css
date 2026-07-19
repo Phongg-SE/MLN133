@@ -113,6 +113,19 @@
   color: var(--color-gold-light);
 }
 
+.question-advisor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-gold-light);
+  background: rgba(212, 175, 55, 0.15);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
 .question-text {
   font-size: 1.15rem;
   line-height: 1.5;

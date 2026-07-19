@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GameButton } from '../Button/GameButton';
-import { Heart, Zap, Compass, Sparkles, BookOpen, ShieldCheck, X } from 'lucide-react';
+import { BookOpen, Shield, Zap, Compass, Sparkles, X, Award, HelpCircle, AlertTriangle, Eye, Clock } from 'lucide-react';
 import { AudioService } from '../../services/AudioService';
 import './GuideModal.css';
 
@@ -11,94 +11,149 @@ export interface GuideModalProps {
 }
 
 export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose }) => {
-  const [activeTab, setActiveTab] = useState<'rules' | 'stats' | 'wheel' | 'cards'>('rules');
+  const [activeTab, setActiveTab] = useState<'story' | 'levels' | 'cards' | 'wheel'>('story');
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="guide-overlay" onClick={() => { AudioService.playClick(); onClose(); }}>
+      <div className="guide-overlay" onClick={onClose}>
         <motion.div
           className="guide-modal glass-panel"
-          initial={{ scale: 0.8, opacity: 0, y: 20 }}
+          initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.8, opacity: 0, y: 20 }}
+          exit={{ scale: 0.9, opacity: 0, y: 20 }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="guide-modal__header">
-            <div className="guide-modal__title-wrap">
-              <BookOpen size={24} color="#FFD700" />
-              <h2>CẨM NANG HƯỚNG DẪN BIỆN CHỨNG</h2>
+          <div className="guide-header">
+            <div className="guide-title-wrap">
+              <Compass size={28} color="#FFD700" />
+              <div>
+                <h2 className="gold-text-glow">CẨM NANG VÒNG QUAY BIỆN CHỨNG</h2>
+                <span className="guide-slogan">"Kiên định lý luận, vững tay chèo lái"</span>
+              </div>
             </div>
-            <button className="guide-modal__close-btn" onClick={() => { AudioService.playClick(); onClose(); }}>
-              <X size={24} color="#F5E6C8" />
+            <button className="guide-close-btn" onClick={() => { AudioService.playClick(); onClose(); }}>
+              <X size={24} color="#FFF8DC" />
             </button>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="guide-modal__tabs">
+          <div className="guide-tabs">
             <button
-              className={`guide-tab ${activeTab === 'rules' ? 'guide-tab--active' : ''}`}
-              onClick={() => { AudioService.playClick(); setActiveTab('rules'); }}
+              className={`guide-tab ${activeTab === 'story' ? 'guide-tab--active' : ''}`}
+              onClick={() => { AudioService.playClick(); setActiveTab('story'); }}
             >
-              <ShieldCheck size={16} /> LUẬT CHƠI
+              <BookOpen size={16} /> bối cảnh cốt truyện
             </button>
             <button
-              className={`guide-tab ${activeTab === 'stats' ? 'guide-tab--active' : ''}`}
-              onClick={() => { AudioService.playClick(); setActiveTab('stats'); }}
+              className={`guide-tab ${activeTab === 'levels' ? 'guide-tab--active' : ''}`}
+              onClick={() => { AudioService.playClick(); setActiveTab('levels'); }}
             >
-              <Heart size={16} /> CHỈ SỐ (HP/XP)
-            </button>
-            <button
-              className={`guide-tab ${activeTab === 'wheel' ? 'guide-tab--active' : ''}`}
-              onClick={() => { AudioService.playClick(); setActiveTab('wheel'); }}
-            >
-              <Compass size={16} /> VÒNG QUAY
+              <Compass size={16} /> 3 màn chơi (levels)
             </button>
             <button
               className={`guide-tab ${activeTab === 'cards' ? 'guide-tab--active' : ''}`}
               onClick={() => { AudioService.playClick(); setActiveTab('cards'); }}
             >
-              <Sparkles size={16} /> THẺ MAY MẮN
+              <Zap size={16} /> 4 thẻ bài chiến thuật
+            </button>
+            <button
+              className={`guide-tab ${activeTab === 'wheel' ? 'guide-tab--active' : ''}`}
+              onClick={() => { AudioService.playClick(); setActiveTab('wheel'); }}
+            >
+              <Sparkles size={16} /> vòng quay & cố vấn
             </button>
           </div>
 
           {/* Tab Content */}
-          <div className="guide-modal__body">
-            {activeTab === 'rules' && (
-              <div className="guide-content">
-                <h3>📜 LUẬT CHƠI TỔNG QUÁT</h3>
+          <div className="guide-content">
+            {activeTab === 'story' && (
+              <div className="guide-panel">
+                <h3>🇻🇳 BỐI CẢNH & NHÀM NHIỆM VỤ ĐÔNG DƯƠNG QUỐC</h3>
                 <p>
-                  "Vòng Quay Biện Chứng" là trò chơi chiến thuật trí tuệ nhằm chinh phục 7 Chương lý luận
-                  Chủ nghĩa Xã hội Khoa học. Người chơi vượt qua từng vùng đất trên bản đồ lịch sử bằng cách
-                  quay Vòng quay biện chứng, trả lời các câu hỏi lý luận và xử lý các biến cố.
+                  Tại quốc gia giả định <strong>Đông Dương Quốc</strong>, cuộc cách mạng vô sản vừa giành chiến thắng vang dội. Đất nước chính thức bước vào <strong>Thời kỳ quá độ lên Chủ nghĩa xã hội</strong>.
                 </p>
-                <ul>
-                  <li><strong>Hành trình 7 Màn:</strong> Màn 1 đến Màn 7 đại diện cho 7 Chương giáo trình.</li>
-                  <li><strong>Quay Vòng Quay:</strong> Mỗi lượt quay sẽ dẫn đến Câu hỏi, Thẻ bài hay Biến cố.</li>
-                  <li><strong>Chiến Thắng:</strong> Hoàn thành số câu hỏi yêu cầu trong màn chơi để mở khóa Màn tiếp theo.</li>
-                  <li><strong>Thất Bại:</strong> Khi điểm HP giảm về 0, bạn sẽ bị cạn kiệt năng lượng biện chứng.</li>
-                </ul>
+                <p>
+                  Bạn đảm nhận trọng trách làm <strong>Ban Lãnh Đạo Tiền Phong (Nhà Kiến Thiết Cách Mạng)</strong>. Bạn cần vận dụng vũ khí lý luận của Chủ nghĩa xã hội khoa học để giải quyết các bài toán về giai cấp, dân tộc, tôn giáo và gia đình nhằm bảo vệ thành quả cách mạng!
+                </p>
+                <div className="guide-stat-explain">
+                  <div className="guide-stat-item">
+                    <Zap size={20} color="#FFD700" />
+                    <div>
+                      <strong>Điểm Giác Ngộ (XP):</strong> Thước đo tiến trình vượt ải. Tích lũy đủ chỉ số XP yêu cầu để chinh phục thành công mỗi Màn chơi.
+                    </div>
+                  </div>
+                  <div className="guide-stat-item">
+                    <Shield size={20} color="#FF5252" />
+                    <div>
+                      <strong>Ổn Định Xã Hội (HP):</strong> Thanh sinh mệnh của quốc gia (Khởi đầu 100 HP). Trả lời sai lý luận hoặc gặp Khủng hoảng mà không phòng vệ sẽ bị trừ máu. HP tụt về 0 = Thất bại!
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
-            {activeTab === 'stats' && (
-              <div className="guide-content">
-                <h3>❤️ HỆ THỐNG CHỈ SỐ GAME</h3>
-                <div className="guide-stat-grid">
-                  <div className="guide-stat-card">
-                    <Heart size={32} color="#FF5252" />
+            {activeTab === 'levels' && (
+              <div className="guide-panel">
+                <h3>🗺️ HỆ THỐNG 3 MÀN CHƠI THEO MẠCH KIẾN THỨC</h3>
+                <div className="guide-sectors-grid">
+                  <div className="guide-sector-card">
+                    <Award size={24} color="#FFD700" />
                     <div>
-                      <h4>HP (Điểm Sinh Lực)</h4>
-                      <p>Khởi đầu 100 HP. Trả lời sai câu hỏi hoặc gặp biến cố nguy hiểm sẽ bị trừ HP.</p>
+                      <strong>Màn 1: Công xưởng thế kỷ XIX (300 XP)</strong>
+                      <p>Chương 1 & 2: Nhập môn CNXH Khoa học & Sứ mệnh Giai cấp Công nhân. Bối cảnh công xưởng, nhà máy, bánh răng công nghiệp.</p>
                     </div>
                   </div>
-                  <div className="guide-stat-card">
-                    <Zap size={32} color="#FFD700" />
+                  <div className="guide-sector-card">
+                    <Award size={24} color="#00E5FF" />
                     <div>
-                      <h4>XP (Điểm Tri Thức)</h4>
-                      <p>Nhận XP khi trả lời đúng và lật Thẻ may mắn. Đủ 100 XP để thăng hạng sao đánh giá.</p>
+                      <strong>Màn 2: Nghị trường Cách mạng (600 XP)</strong>
+                      <p>Chương 3 & 4: CNXH & Thời kỳ quá độ, Dân chủ & Nhà nước XHCN. Bối cảnh quảng trường trung tâm, tòa nhà nghị sự quốc gia.</p>
+                    </div>
+                  </div>
+                  <div className="guide-sector-card">
+                    <Award size={24} color="#66BB6A" />
+                    <div>
+                      <strong>Màn 3: Bản làng & Mái ấm Hiện đại (1000 XP)</strong>
+                      <p>Chương 5, 6 & 7: Cơ cấu Xã hội - Giai cấp, Dân tộc, Tôn giáo & Gia đình XHCN. Bối cảnh thung lũng đa sắc màu văn hóa & kiến trúc hiện đại.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'cards' && (
+              <div className="guide-panel">
+                <h3>🃏 4 THẺ BÀI CHIẾN THUẬT BỔ TRỢ</h3>
+                <div className="guide-sectors-grid">
+                  <div className="guide-sector-card">
+                    <Zap size={22} color="#FFD700" />
+                    <div>
+                      <strong>Liên minh Công - Nông (XP x2)</strong>
+                      <p>Sức mạnh đoàn kết giai cấp. Nhân đôi số Điểm Giác Ngộ (XP x2) nhận được nếu trả lời đúng câu hỏi ở lượt này.</p>
+                    </div>
+                  </div>
+                  <div className="guide-sector-card">
+                    <Clock size={22} color="#00E5FF" />
+                    <div>
+                      <strong>Kế hoạch hóa tập trung (+10s)</strong>
+                      <p>Sự điều tiết vĩ mô khoa học. Thêm ngay +10 giây vào đồng hồ đếm ngược của lượt chơi hiện tại.</p>
+                    </div>
+                  </div>
+                  <div className="guide-sector-card">
+                    <Shield size={22} color="#66BB6A" />
+                    <div>
+                      <strong>Kiên định tư tưởng (Khiên HP)</strong>
+                      <p>Thẻ phòng vệ bị động. Tự động tiêu hao để chặn bị trừ máu (HP -= 0) khi trả lời sai hoặc trúng ô Khủng hoảng.</p>
+                    </div>
+                  </div>
+                  <div className="guide-sector-card">
+                    <Eye size={22} color="#E040FB" />
+                    <div>
+                      <strong>Giác ngộ lý luận (Trợ giúp 50/50)</strong>
+                      <p>Tư duy khoa học biện chứng. Kích hoạt trợ giúp 50/50, lập tức ẩn 2 phương án trả lời sai trên bảng câu hỏi.</p>
                     </div>
                   </div>
                 </div>
@@ -106,37 +161,40 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose }) => {
             )}
 
             {activeTab === 'wheel' && (
-              <div className="guide-content">
-                <h3>🎡 VÒNG QUAY BIỆN CHỨNG (8 PHÂN KHÚC)</h3>
-                <p>Vòng quay đại diện cho các quy luật và hạng mục biện chứng:</p>
-                <ul>
-                  <li><strong>Câu Hỏi Lý Luận:</strong> Mở bảng câu hỏi trắc nghiệm 4 đáp án có lời giải chi tiết.</li>
-                  <li><strong>Lượng - Chất:</strong> Tích lũy bứt phá, tăng điểm thưởng XP.</li>
-                  <li><strong>Mâu Thuẫn:</strong> Động lực phát triển, cơ hội thử thách nhận phần thưởng lớn.</li>
-                  <li><strong>Phủ Định Của Phủ Định:</strong> Kế thừa yếu tố tiến bộ, hồi phục HP hoặc nhận thẻ bài.</li>
-                </ul>
-              </div>
-            )}
-
-            {activeTab === 'cards' && (
-              <div className="guide-content">
-                <h3>🃏 THẺ BÀI MAY MẮN & KHAY THẺ CHIẾN THUẬT</h3>
-                <p>
-                  Khi ô Vòng quay dừng ở 'Thẻ May Mắn', bạn sẽ được chọn 1 trong 3 lá bài úp 3D:
+              <div className="guide-panel">
+                <h3>⚙️ VÒNG QUAY 8 Ô MA TRẬN & CỐ VẤN LÝ LUẬN</h3>
+                <p>Mỗi lượt quay dừng ngẫu nhiên ở 1 trong 8 ô thuộc 3 kịch bản chính:</p>
+                <div className="guide-sectors-grid">
+                  <div className="guide-sector-card">
+                    <HelpCircle size={20} color="#FFD700" />
+                    <div>
+                      <strong>Ô Câu hỏi lý luận:</strong> Trắc nghiệm kiến thức. Trả lời đúng nhận +25 XP, sai bị trừ -20 HP. Game có 3 giây dừng hiển thị giải thích giáo trình.
+                    </div>
+                  </div>
+                  <div className="guide-sector-card">
+                    <Sparkles size={20} color="#00E5FF" />
+                    <div>
+                      <strong>Ô Thẻ may mắn:</strong> Chọn lật 1 trong 3 lá bài để bổ sung vào khay vật phẩm túi đồ.
+                    </div>
+                  </div>
+                  <div className="guide-sector-card">
+                    <AlertTriangle size={20} color="#FF5252" />
+                    <div>
+                      <strong>Ô Thử thách khủng hoảng:</strong> Sự kiện mâu thuẫn quốc gia ở Đông Dương Quốc. Chọn quyết sách đúng để vượt qua khủng hoảng.
+                    </div>
+                  </div>
+                </div>
+                <p style={{ marginTop: '10px' }}>
+                  👴 <strong>NPC Cố vấn Lý luận:</strong> Các nhà kinh điển <em>C.Mác, Ph.Ăng-ghen, V.I.Lênin</em> sẽ xuất hiện trong các câu hỏi để đưa ra trích dẫn gợi ý sâu sắc.
                 </p>
-                <ul>
-                  <li><strong>Gợi Ý 50/50:</strong> Loại bỏ 2 lựa chọn sai trong câu hỏi khó.</li>
-                  <li><strong>Khiên Biện Chứng:</strong> Bảo vệ HP không bị tổn hại khi chọn sai đáp án.</li>
-                  <li><strong>Nhân 2 XP:</strong> Nhân đôi phần thưởng tri thức thu được.</li>
-                </ul>
               </div>
             )}
           </div>
 
-          {/* Footer */}
-          <div className="guide-modal__footer">
+          {/* Footer Action */}
+          <div className="guide-footer">
             <GameButton variant="primary" size="md" onClick={() => { AudioService.playClick(); onClose(); }}>
-              ĐÃ HẠU THUẪN (ĐÓNG)
+              ĐÃ ĐỌC & ĐỒNG Ý CHÈO LÁI
             </GameButton>
           </div>
         </motion.div>
