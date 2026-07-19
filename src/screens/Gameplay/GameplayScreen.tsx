@@ -99,8 +99,10 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
   const chapterTitle = QuestionService.getChapterName(level);
 
-  // Level Countdown Timer Effect
+  // Pause Countdown Timer when answering / viewing popup (ONLY run when panelState === 'welcome')
   useEffect(() => {
+    if (panelState !== 'welcome') return;
+
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
@@ -112,7 +114,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [onGameOver]);
+  }, [panelState, onGameOver]);
 
   // Handle Wheel Spin Result
   const handleSpinComplete = (sector: Sector) => {
@@ -184,7 +186,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     if (card.id === 'card1') {
       setHp((prev) => Math.min(prev + 20, maxHp));
     } else if (card.id === 'card2') {
-      const newXp = xp + 15; // Reduced from 40 to 15 XP
+      const newXp = xp + 15;
       setXp(newXp);
       if (newXp >= maxXp) {
         setTimeout(() => {
@@ -206,7 +208,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
     if (choice === 'reform') {
       AudioService.playCorrect();
-      const newXp = Math.min(xp + 15, maxXp); // Reduced from 30 to 15 XP
+      const newXp = Math.min(xp + 15, maxXp);
       setXp(newXp);
       setCrisisOutcome({
         title: '✅ CẢI CÁCH TIẾN BỘ THÀNH CÔNG',
@@ -276,11 +278,11 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
       {/* Main Center Area */}
       <main className="gameplay-main">
-        {/* Left Panel: Dialectical Wheel */}
+        {/* Left Panel: Dialectical Wheel - ONLY enabled when panelState is 'welcome' */}
         <section className="gameplay-wheel-section">
           <DialecticalWheel
             onSpinComplete={handleSpinComplete}
-            disabled={panelState === 'question' && selectedOption === null}
+            disabled={panelState !== 'welcome'}
           />
         </section>
 
