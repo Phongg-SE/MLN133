@@ -113,17 +113,35 @@
   color: var(--color-gold-light);
 }
 
-.question-advisor {
+/* Interactive Advisor Button */
+.advisor-btn {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 5px 14px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: var(--radius-sm);
+  color: var(--color-gold-light);
+  font-family: var(--font-heading);
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--color-gold-light);
-  background: rgba(212, 175, 55, 0.15);
-  padding: 3px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.advisor-btn:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.3);
+  border-color: var(--color-gold-light);
+  box-shadow: 0 0 14px rgba(255, 215, 0, 0.4);
+}
+
+.advisor-btn--used {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #78909C;
 }
 
 .question-text {

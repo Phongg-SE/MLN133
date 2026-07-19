@@ -18,7 +18,7 @@ export const DEFAULT_INVENTORY_ITEMS: InventoryItem[] = [
     id: 'lienMinhCongNong',
     name: 'Liên minh Công - Nông',
     subtitle: 'Nhân đôi XP (x2)',
-    description: 'Nền tảng đoàn kết giai cấp. Nhân đôi Điểm Giác Ngộ (XP x2) nếu trả lời đúng lượt này.',
+    description: 'Nền tảng đoàn kết giai cấp. Nhân đôi số Điểm Giác Ngộ (XP x2) nếu trả lời đúng lượt này.',
     count: 2,
     icon: <Zap size={22} color="#FFD700" />,
   },
@@ -52,23 +52,36 @@ export interface InventoryBarProps {
   items: InventoryItem[];
   onUseItem: (itemId: string) => void;
   disabled?: boolean;
+  active5050?: boolean;
+  activeDoubleXp?: boolean;
 }
 
 export const InventoryBar: React.FC<InventoryBarProps> = ({
   items,
   onUseItem,
   disabled = false,
+  active5050 = false,
+  activeDoubleXp = false,
 }) => {
   return (
     <footer className="inventory-bar glass-panel">
       <div className="inventory-bar__header">
         <Package size={18} color="#FFD700" />
-        <span className="inventory-bar__title">KHO THẺ BÀI CHIẾN THUẬT (TỐI ĐA 3 LÁ ACTIVE)</span>
+        <span className="inventory-bar__title">KHO THẺ BÀI CHIẾN THUẬT</span>
       </div>
 
       <div className="inventory-bar__grid">
         {items.map((item) => {
-          const isAvailable = item.count > 0 && !disabled;
+          let isItemDisabled = item.count <= 0 || disabled;
+
+          if (item.id === 'giacNgoLyLuan' && active5050) {
+            isItemDisabled = true; // Disable 50/50 card if already active on current question
+          }
+          if (item.id === 'lienMinhCongNong' && activeDoubleXp) {
+            isItemDisabled = true; // Disable x2 XP card if already active on current turn
+          }
+
+          const isAvailable = !isItemDisabled;
 
           return (
             <motion.button
@@ -81,7 +94,14 @@ export const InventoryBar: React.FC<InventoryBarProps> = ({
                 AudioService.playClick();
                 onUseItem(item.id);
               }}
-              title={`${item.name}: ${item.description}`}
+              disabled={!isAvailable}
+              title={
+                item.id === 'giacNgoLyLuan' && active5050
+                  ? 'Đã kích hoạt 50/50 cho câu hỏi này!'
+                  : item.id === 'lienMinhCongNong' && activeDoubleXp
+                  ? 'Đã kích hoạt Nhân 2 XP cho lượt này!'
+                  : `${item.name}: ${item.description}`
+              }
             >
               <div className="inventory-slot__icon-wrap">
                 {item.icon}
@@ -89,7 +109,11 @@ export const InventoryBar: React.FC<InventoryBarProps> = ({
               </div>
 
               <div className="inventory-slot__info">
-                <span className="inventory-slot__name">{item.name}</span>
+                <span className="inventory-slot__name">
+                  {item.name}
+                  {item.id === 'giacNgoLyLuan' && active5050 && ' (Đã dùng)'}
+                  {item.id === 'lienMinhCongNong' && activeDoubleXp && ' (Đã dùng)'}
+                </span>
                 <span className="inventory-slot__sub">{item.subtitle}</span>
               </div>
             </motion.button>

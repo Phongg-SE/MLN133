@@ -10,7 +10,7 @@ import { GuideModal } from '../../components/Modal/GuideModal';
 import { QuestionService } from '../../services/QuestionService';
 import type { Question } from '../../data/questions';
 import { AudioService } from '../../services/AudioService';
-import { Sparkles, CheckCircle2, XCircle, AlertTriangle, ArrowRight, Eye, Shield, Zap, UserCheck } from 'lucide-react';
+import { Sparkles, CheckCircle2, XCircle, AlertTriangle, ArrowRight, Eye, Shield, Zap, UserCheck, Lightbulb } from 'lucide-react';
 import './GameplayScreen.css';
 
 export interface GameplayScreenProps {
@@ -161,7 +161,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
   // Get Chapter Metadata
   const chapterMeta = QuestionService.getChapterMeta(level);
   const maxXp = chapterMeta.targetXp;
-  const baseTimer = chapterMeta.timerPerQ * 4; // Total countdown time for session
+  const baseTimer = chapterMeta.timerPerQ * 4;
 
   // Game Stats
   const [hp, setHp] = useState<number>(100);
@@ -185,6 +185,10 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     explanation: string;
     advisor?: string;
   } | null>(null);
+
+  // Advisor Button State Per Question (1 click = eliminate 1 wrong option)
+  const [advisorUsedThisQuestion, setAdvisorUsedThisQuestion] = useState<boolean>(false);
+  const [hiddenOptions, setHiddenOptions] = useState<number[]>([]);
 
   // Crisis Scenario & Outcome State
   const [currentCrisis, setCurrentCrisis] = useState<CrisisScenario>(CRISIS_EVENTS_LIST[0]);
@@ -227,6 +231,8 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     setFlippedCardIdx(null);
     setActive5050(false);
     setCrisisOutcome(null);
+    setAdvisorUsedThisQuestion(false); // Reset Advisor button for new question
+    setHiddenOptions([]);
 
     if (sector.type === 'question' || sector.type === 'buff') {
       const q = QuestionService.getRandomQuestion(level, usedQuestionIds);
@@ -244,6 +250,26 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
       setCurrentCrisis(randomCrisis);
       setPanelState('crisis');
     }
+  };
+
+  // Advisor Click Handler: Eliminate 1 wrong answer option (allowed ONLY once per question)
+  const handleAskAdvisor = () => {
+    if (advisorUsedThisQuestion || !currentQuestion || selectedOption !== null) return;
+
+    AudioService.playCardFlip();
+
+    // Find wrong answer indexes
+    const wrongIndexes = [0, 1, 2, 3].filter(
+      (idx) => idx !== currentQuestion.correctAnswer && !hiddenOptions.includes(idx)
+    );
+
+    if (wrongIndexes.length > 0) {
+      // Pick 1 random wrong answer to eliminate
+      const randomWrongIdx = wrongIndexes[Math.floor(Math.random() * wrongIndexes.length)];
+      setHiddenOptions((prev) => [...prev, randomWrongIdx]);
+    }
+
+    setAdvisorUsedThisQuestion(true); // Disable advisor button for remainder of this question
   };
 
   // Option Select Handler
@@ -368,11 +394,19 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
   // Use Item from Inventory
   const handleUseItem = (itemId: string) => {
-    if (itemId === 'giacNgoLyLuan' && panelState === 'question' && currentQuestion) {
+    if (itemId === 'giacNgoLyLuan') {
+      // PREVENT RE-USING 50/50 ON SAME QUESTION IF ALREADY ACTIVE!
+      if (panelState !== 'question' || !currentQuestion || active5050 || selectedOption !== null) {
+        return;
+      }
       setActive5050(true);
     } else if (itemId === 'keHoachHoa') {
       setTimer((prev) => prev + 10);
     } else if (itemId === 'lienMinhCongNong') {
+      // PREVENT RE-USING DOUBLE XP IF ALREADY ACTIVE!
+      if (activeDoubleXp) {
+        return;
+      }
       setActiveDoubleXp(true);
     }
 
@@ -446,11 +480,32 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
               >
                 <div className="question-header">
                   <span className="question-category">{currentQuestion.category}</span>
-                  {currentQuestion.advisor && (
-                    <span className="question-advisor font-number">
-                      <UserCheck size={14} color="#FFD700" /> Cố vấn: {currentQuestion.advisor}
-                    </span>
-                  )}
+
+                  {/* Interactive Advisor Button: 1 click = eliminate 1 wrong option per question */}
+                  <motion.button
+                    className={`advisor-btn ${advisorUsedThisQuestion ? 'advisor-btn--used' : ''}`}
+                    whileHover={{ scale: advisorUsedThisQuestion || selectedOption !== null ? 1 : 1.05 }}
+                    whileTap={{ scale: advisorUsedThisQuestion || selectedOption !== null ? 1 : 0.95 }}
+                    onClick={handleAskAdvisor}
+                    disabled={advisorUsedThisQuestion || selectedOption !== null}
+                    title={
+                      advisorUsedThisQuestion
+                        ? 'Cố vấn đã loại bỏ 1 đáp án sai cho câu hỏi này!'
+                        : 'Bấm để Cố vấn loại bỏ 1 đáp án sai!'
+                    }
+                  >
+                    {advisorUsedThisQuestion ? (
+                      <>
+                        <UserCheck size={16} color="#78909C" />
+                        <span>Cố vấn {currentQuestion.advisor || 'Lý luận'} (Đã dùng)</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lightbulb size={16} color="#FFD700" />
+                        <span>Hỏi Cố vấn {currentQuestion.advisor || 'Lý luận'} (-1 đáp án sai)</span>
+                      </>
+                    )}
+                  </motion.button>
                 </div>
 
                 <h3 className="question-text">{currentQuestion.question}</h3>
@@ -461,7 +516,14 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
                     const optionLetter = String.fromCharCode(65 + idx);
                     let optionStatus: 'idle' | 'correct' | 'wrong' | 'hidden' = 'idle';
 
-                    if (active5050 && idx !== currentQuestion.correctAnswer && idx === (currentQuestion.correctAnswer + 1) % 4) {
+                    // Hide if eliminated by Advisor OR 50/50 Card
+                    if (hiddenOptions.includes(idx)) {
+                      optionStatus = 'hidden';
+                    } else if (
+                      active5050 &&
+                      idx !== currentQuestion.correctAnswer &&
+                      idx === (currentQuestion.correctAnswer + 1) % 4
+                    ) {
                       optionStatus = 'hidden';
                     }
 
@@ -632,6 +694,8 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
         items={inventory}
         onUseItem={handleUseItem}
         disabled={panelState !== 'question' && panelState !== 'welcome'}
+        active5050={active5050}
+        activeDoubleXp={activeDoubleXp}
       />
 
       {/* Pause Modal */}
