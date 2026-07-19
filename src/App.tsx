@@ -14,8 +14,8 @@ export type ScreenState = 'splash' | 'menu' | 'levelSelect' | 'gameplay' | 'vict
 export const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenState>('splash');
   const [selectedLevel, setSelectedLevel] = useState<number>(1);
-  const [completedLevels, setCompletedLevels] = useState<number[]>([1]); // chapter 1 unlocked by default
-  const [levelStars, setLevelStars] = useState<Record<number, number>>({ 1: 3 });
+  const [completedLevels, setCompletedLevels] = useState<number[]>([]); // Empty initial completed levels
+  const [levelStars, setLevelStars] = useState<Record<number, number>>({}); // Empty initial stars
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
 
   const [victoryStats, setVictoryStats] = useState<{
