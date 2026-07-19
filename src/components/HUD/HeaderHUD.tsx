@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatBar } from '../ProgressBar/StatBar';
-import { Heart, Zap, Clock, Volume2, VolumeX, Home, Shield, Award } from 'lucide-react';
+import { Heart, Zap, Clock, Volume2, VolumeX, Home, Shield, Award, Pause } from 'lucide-react';
 import { AudioService } from '../../services/AudioService';
 import './HeaderHUD.css';
 
@@ -15,6 +15,7 @@ export interface HeaderHUDProps {
   chapterTitle: string;
   score: number;
   onHomeClick?: () => void;
+  onPauseClick?: () => void;
   isAudioMuted: boolean;
   onToggleAudio: () => void;
 }
@@ -30,6 +31,7 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
   chapterTitle,
   score,
   onHomeClick,
+  onPauseClick,
   isAudioMuted,
   onToggleAudio,
 }) => {
@@ -72,12 +74,25 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
         />
       </div>
 
-      {/* Right: Score, Sound & Home */}
+      {/* Right: Score, Pause, Sound & Home */}
       <div className="header-hud__section header-hud__actions">
         <div className="header-hud__score">
           <Award size={18} className="header-hud__score-icon" />
           <div className="header-hud__score-value font-number">{score}</div>
         </div>
+
+        {onPauseClick && (
+          <button
+            className="header-hud__btn header-hud__btn--pause"
+            onClick={() => {
+              AudioService.playClick();
+              onPauseClick();
+            }}
+            title="Tạm Dừng Trò Chơi"
+          >
+            <Pause size={20} color="#FFD700" />
+          </button>
+        )}
 
         <button
           className="header-hud__btn"
