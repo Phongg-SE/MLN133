@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { AudioService } from '../../services/AudioService';
 import { GameButton } from '../Button/GameButton';
-import { HelpCircle, Sparkles, AlertTriangle, ShieldAlert, Award, RefreshCw, Compass, BookOpen } from 'lucide-react';
+import { HelpCircle, Sparkles, AlertTriangle, Award, RefreshCw, Compass, BookOpen, Brain } from 'lucide-react';
 import './DialecticalWheel.css';
 
 export interface Sector {
@@ -34,13 +34,21 @@ export const WHEEL_SECTORS: Sector[] = [
   {
     id: 2,
     label: 'LƯỢNG - CHẤT',
-    sublabel: 'Tích lũy bứt phá',
-    type: 'buff',
+    sublabel: 'Câu hỏi Tích lũy',
+    type: 'question',
     color: '#2E7D32',
     icon: <Award size={20} color="#FFD700" />,
   },
   {
     id: 3,
+    label: 'CÂU HỎI TRI THỨC',
+    sublabel: 'Chủ nghĩa XH Khoa học',
+    type: 'question',
+    color: '#B71C1C',
+    icon: <Brain size={20} color="#FFD700" />,
+  },
+  {
+    id: 4,
     label: 'KHỦNG HOẢNG',
     sublabel: 'Biến cố lịch sử',
     type: 'crisis',
@@ -48,36 +56,28 @@ export const WHEEL_SECTORS: Sector[] = [
     icon: <AlertTriangle size={20} color="#FF5252" />,
   },
   {
-    id: 4,
-    label: 'CÂU HỎI BẬC CAO',
+    id: 5,
+    label: 'CÂU HỎI VẬN DỤNG',
     sublabel: 'Vận dụng thực tiễn',
     type: 'question',
-    color: '#B71C1C',
+    color: '#E65100',
     icon: <BookOpen size={20} color="#FFD700" />,
   },
   {
-    id: 5,
+    id: 6,
     label: 'MÂU THUẪN',
-    sublabel: 'Động lực phát triển',
-    type: 'buff',
-    color: '#E65100',
+    sublabel: 'Câu hỏi Động lực',
+    type: 'question',
+    color: '#00838F',
     icon: <Compass size={20} color="#FFD700" />,
   },
   {
-    id: 6,
-    label: 'PHỦ ĐỊNH',
+    id: 7,
+    label: 'PHỦ ĐỊNH PRO',
     sublabel: 'Kế thừa tiến bộ',
     type: 'lucky',
-    color: '#00838F',
-    icon: <RefreshCw size={20} color="#FFD700" />,
-  },
-  {
-    id: 7,
-    label: 'THỬ THÁCH',
-    sublabel: 'Vượt mâu thuẫn',
-    type: 'crisis',
     color: '#880E4F',
-    icon: <ShieldAlert size={20} color="#FF5252" />,
+    icon: <RefreshCw size={20} color="#FFD700" />,
   },
 ];
 
@@ -99,11 +99,27 @@ export const DialecticalWheel: React.FC<DialecticalWheelProps> = ({
     setIsSpinning(true);
     AudioService.playClick();
 
-    // Select random sector (0 to 7)
-    const targetSectorIdx = Math.floor(Math.random() * 8);
-    const sectorAngle = 360 / 8; // 45 degrees per sector
+    // Weighted Random Selection: ~70% chance for Question sectors (IDs 0, 2, 3, 5, 6)
+    // 15% chance for Lucky (IDs 1, 7), 15% chance for Crisis (ID 4)
+    const questionSectorIds = [0, 2, 3, 5, 6];
+    const luckySectorIds = [1, 7];
+    const crisisSectorIds = [4];
 
-    // Calculate rotation angle so target sector lands at pointer top (0 deg)
+    const rand = Math.random();
+    let targetSectorIdx: number;
+
+    if (rand < 0.70) {
+      // 70% Question
+      targetSectorIdx = questionSectorIds[Math.floor(Math.random() * questionSectorIds.length)];
+    } else if (rand < 0.85) {
+      // 15% Lucky
+      targetSectorIdx = luckySectorIds[Math.floor(Math.random() * luckySectorIds.length)];
+    } else {
+      // 15% Crisis
+      targetSectorIdx = crisisSectorIds[Math.floor(Math.random() * crisisSectorIds.length)];
+    }
+
+    const sectorAngle = 360 / 8; // 45 degrees per sector
     const fullSpins = 5 + Math.floor(Math.random() * 3); // 5 to 7 full rotations
     const targetAngle = fullSpins * 360 + (360 - targetSectorIdx * sectorAngle - sectorAngle / 2);
 

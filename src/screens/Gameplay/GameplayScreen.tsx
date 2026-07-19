@@ -27,19 +27,19 @@ export const SAMPLE_LUCKY_CARDS: CardItem[] = [
     id: 'card1',
     title: 'Hồi Phục Sinh Lực',
     subtitle: 'Năng lượng Biện chứng',
-    description: 'Hồi ngay +25 điểm HP sinh lực cho người chơi.',
+    description: 'Hồi ngay +20 điểm HP sinh lực cho người chơi.',
     type: 'buff',
     icon: <Shield size={32} color="#66BB6A" />,
-    valueEffect: '+25 HP',
+    valueEffect: '+20 HP',
   },
   {
     id: 'card2',
-    title: 'Đột Phá Tri Thức',
+    title: 'Tích Lũy Tri Thức',
     subtitle: 'Lượng biến đổi Chất',
-    description: 'Thưởng ngay +40 điểm XP kinh nghiệm lý luận.',
+    description: 'Thưởng nhẹ +15 điểm XP kinh nghiệm lý luận.',
     type: 'special',
     icon: <Zap size={32} color="#FFD700" />,
-    valueEffect: '+40 XP',
+    valueEffect: '+15 XP',
   },
   {
     id: 'card3',
@@ -182,9 +182,9 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     const card = SAMPLE_LUCKY_CARDS[index];
 
     if (card.id === 'card1') {
-      setHp((prev) => Math.min(prev + 25, maxHp));
+      setHp((prev) => Math.min(prev + 20, maxHp));
     } else if (card.id === 'card2') {
-      const newXp = xp + 40;
+      const newXp = xp + 15; // Reduced from 40 to 15 XP
       setXp(newXp);
       if (newXp >= maxXp) {
         setTimeout(() => {
@@ -206,12 +206,12 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
     if (choice === 'reform') {
       AudioService.playCorrect();
-      const newXp = Math.min(xp + 30, maxXp);
+      const newXp = Math.min(xp + 15, maxXp); // Reduced from 30 to 15 XP
       setXp(newXp);
       setCrisisOutcome({
         title: '✅ CẢI CÁCH TIẾN BỘ THÀNH CÔNG',
         text: 'Nhờ nắm vững quy luật mâu thuẫn là động lực phát triển, bạn đã thúc đẩy xã hội tiến bước!',
-        effectText: '+30 XP Tri thức',
+        effectText: '+15 XP Tri thức',
         isSuccess: true,
       });
 
