@@ -94,7 +94,7 @@ export const App: React.FC = () => {
         <VictoryScreen
           level={selectedLevel}
           stats={victoryStats}
-          onNextLevel={() => handleSelectLevel(Math.min(selectedLevel + 1, 7))}
+          onNextLevel={() => setCurrentScreen('levelSelect')} // Navigate back to Map to see character jump animation!
           onRetry={() => setCurrentScreen('gameplay')}
           onHomeClick={() => setCurrentScreen('menu')}
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GameButton } from '../../components/Button/GameButton';
 import { Lock, Flag, Star, ArrowLeft, Shield, MapPin, Compass, Factory, Landmark, Home } from 'lucide-react';
@@ -113,6 +113,18 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
   onSelectLevel,
   onBackToMenu,
 }) => {
+  // Determine current active chapter node & previous chapter node for character jump animation
+  const maxCompleted = completedLevels.length > 0 ? Math.max(...completedLevels) : 0;
+  const targetChapterId = Math.min(maxCompleted + 1, 7);
+  const activeNode = CHAPTER_NODES.find((n) => n.chapterId === targetChapterId) || CHAPTER_NODES[0];
+  const startChapterId = maxCompleted > 0 ? maxCompleted : 1;
+  const startNode = CHAPTER_NODES.find((n) => n.chapterId === startChapterId) || activeNode;
+
+  useEffect(() => {
+    // Play character march sound when entering map
+    AudioService.playCardFlip();
+  }, []);
+
   return (
     <div className="level-select-screen">
       {/* Top Header Bar */}
@@ -181,6 +193,36 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
             );
           })}
         </svg>
+
+        {/* CHARACTER ANIMATED AVATAR MARCHOING / JUMPING FROM COMPLETED CHAPTER TO NEXT UNLOCKED CHAPTER */}
+        <motion.div
+          className="map-character-avatar"
+          initial={{
+            left: `${startNode.x}%`,
+            top: `${startNode.y}%`,
+            scale: 0.8,
+            y: 0,
+          }}
+          animate={{
+            left: `${activeNode.x}%`,
+            top: `${activeNode.y}%`,
+            scale: [1, 1.3, 1],
+            y: [0, -25, 0], // Arc jump bounce effect
+          }}
+          transition={{
+            duration: 1.4,
+            ease: [0.25, 0.8, 0.25, 1],
+            times: [0, 0.5, 1],
+          }}
+        >
+          <div className="character-avatar__pulse-ring" />
+          <div className="character-avatar__token">
+            <span className="character-avatar__emoji">🚶‍♂️</span>
+            <div className="character-avatar__flag-badge font-number">
+              <span>TIỀN PHONG</span>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Map Nodes for 7 Chapters */}
         {CHAPTER_NODES.map((node) => {
