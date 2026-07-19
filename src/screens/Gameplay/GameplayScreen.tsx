@@ -80,6 +80,14 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     explanation: string;
   } | null>(null);
 
+  // Crisis Outcome State
+  const [crisisOutcome, setCrisisOutcome] = useState<{
+    title: string;
+    text: string;
+    effectText: string;
+    isSuccess: boolean;
+  } | null>(null);
+
   // Cards State
   const [flippedCardIdx, setFlippedCardIdx] = useState<number | null>(null);
 
@@ -112,6 +120,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     setAnswerResult(null);
     setFlippedCardIdx(null);
     setActive5050(false);
+    setCrisisOutcome(null);
 
     if (sector.type === 'question' || sector.type === 'buff') {
       const q = QuestionService.getRandomQuestion(level, usedQuestionIds);
@@ -188,6 +197,45 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
           item.id === 'hint5050' ? { ...item, count: item.count + 1 } : item
         )
       );
+    }
+  };
+
+  // Crisis Choice Handler
+  const handleCrisisChoice = (choice: 'reform' | 'relic') => {
+    if (crisisOutcome !== null) return;
+
+    if (choice === 'reform') {
+      AudioService.playCorrect();
+      const newXp = Math.min(xp + 30, maxXp);
+      setXp(newXp);
+      setCrisisOutcome({
+        title: '✅ CẢI CÁCH TIẾN BỘ THÀNH CÔNG',
+        text: 'Nhờ nắm vững quy luật mâu thuẫn là động lực phát triển, bạn đã thúc đẩy xã hội tiến bước!',
+        effectText: '+30 XP Tri thức',
+        isSuccess: true,
+      });
+
+      if (newXp >= maxXp) {
+        setTimeout(() => {
+          onVictory({ xpGained: newXp, hpLeft: hp, stars: 3 });
+        }, 1500);
+      }
+    } else {
+      AudioService.playWrong();
+      const newHp = Math.max(hp - 15, 0);
+      setHp(newHp);
+      setCrisisOutcome({
+        title: '❌ BẢO THỦ TÀN DƯ GÂY TỔN HẠI',
+        text: 'Níu kéo phương thức sản xuất cũ làm nảy sinh mâu thuẫn gay gắt, gây cản trở sự phát triển!',
+        effectText: '-15 HP Sinh lực',
+        isSuccess: false,
+      });
+
+      if (newHp <= 0) {
+        setTimeout(() => {
+          onGameOver();
+        }, 1500);
+      }
     }
   };
 
@@ -404,34 +452,48 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 <h3>⚠️ THỬ THÁCH MÂU THUẪN LỊCH SỬ</h3>
                 <p>
                   Phương thức sản xuất cũ xuất hiện biến cố mâu thuẫn đối kháng!
-                  Bạn có 2 lựa chọn giải quyết theo tinh thần biện chứng duy vật:
+                  Bạn hãy đưa ra quyết định giải quyết theo tinh thần biện chứng duy vật:
                 </p>
 
-                <div className="crisis-options">
-                  <GameButton
-                    variant="primary"
-                    size="md"
-                    onClick={() => {
-                      AudioService.playCorrect();
-                      setXp((prev) => Math.min(prev + 30, maxXp));
-                      setPanelState('welcome');
-                    }}
-                  >
-                    CẢI CÁCH TIẾN BỘ (+30 XP)
-                  </GameButton>
+                {crisisOutcome === null ? (
+                  <div className="crisis-options">
+                    <GameButton
+                      variant="primary"
+                      size="md"
+                      onClick={() => handleCrisisChoice('reform')}
+                    >
+                      CẢI CÁCH TIẾN BỘ
+                    </GameButton>
 
-                  <GameButton
-                    variant="danger"
-                    size="md"
-                    onClick={() => {
-                      AudioService.playWrong();
-                      setHp((prev) => Math.max(prev - 15, 0));
-                      setPanelState('welcome');
-                    }}
+                    <GameButton
+                      variant="danger"
+                      size="md"
+                      onClick={() => handleCrisisChoice('relic')}
+                    >
+                      DUY TRÌ TÀN DƯ
+                    </GameButton>
+                  </div>
+                ) : (
+                  <motion.div
+                    className={`explanation-box explanation-box--${crisisOutcome.isSuccess ? 'correct' : 'wrong'}`}
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
                   >
-                    DUY TRÌ TÀN DƯ (-15 HP)
-                  </GameButton>
-                </div>
+                    <div className="explanation-title">{crisisOutcome.title}</div>
+                    <p className="explanation-text">{crisisOutcome.text}</p>
+                    <span className="explanation-page font-number">{crisisOutcome.effectText}</span>
+                    <div className="explanation-actions">
+                      <GameButton
+                        variant="primary"
+                        size="md"
+                        icon={<ArrowRight size={18} />}
+                        onClick={() => setPanelState('welcome')}
+                      >
+                        TIẾP TỤC QUAY
+                      </GameButton>
+                    </div>
+                  </motion.div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
