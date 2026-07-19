@@ -1,0 +1,274 @@
+.gameplay-screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: radial-gradient(circle at 50% 30%, #220B14 0%, #070B19 80%, #000 100%);
+  overflow: hidden;
+  gap: 12px;
+}
+
+.gameplay-main {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Left Section: Wheel */
+.gameplay-wheel-section {
+  flex: 0 0 440px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Right Section: Dynamic Panel */
+.gameplay-dynamic-section {
+  flex: 1;
+  height: 100%;
+  max-height: 640px;
+  padding: 24px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  border: var(--border-gold-thick);
+  background: linear-gradient(180deg, rgba(20, 15, 30, 0.92) 0%, rgba(8, 12, 25, 0.96) 100%);
+}
+
+.dynamic-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Welcome State */
+.dynamic-panel--welcome {
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.dynamic-panel__icon-ring {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--color-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.dynamic-panel--welcome h2 {
+  font-size: 1.4rem;
+  color: var(--color-gold-light);
+}
+
+.dynamic-panel--welcome p {
+  font-size: 0.95rem;
+  color: var(--color-cream);
+  max-width: 550px;
+  line-height: 1.6;
+}
+
+.active-buff-badge {
+  padding: 6px 16px;
+  background: rgba(46, 125, 50, 0.3);
+  border: 1px solid #66BB6A;
+  border-radius: var(--radius-sm);
+  color: #81C784;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Question State */
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  padding-bottom: 8px;
+}
+
+.question-category {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.question-number {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--color-gold-light);
+}
+
+.question-text {
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: #FFF;
+  margin: 6px 0;
+}
+
+/* Question Options */
+.question-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.question-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--color-cream);
+  text-align: left;
+  transition: var(--transition-fast);
+}
+
+.question-opt:hover:not(:disabled) {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--color-gold-light);
+  transform: translateX(4px);
+}
+
+.question-opt__letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-dark);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold-light);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.question-opt__text {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.question-opt--correct {
+  background: rgba(46, 125, 50, 0.3) !important;
+  border-color: #66BB6A !important;
+}
+
+.question-opt--wrong {
+  background: rgba(198, 40, 40, 0.3) !important;
+  border-color: #EF5350 !important;
+}
+
+/* Explanation Box */
+.explanation-box {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.explanation-box--correct {
+  background: rgba(46, 125, 50, 0.15);
+  border: 1px solid #66BB6A;
+}
+
+.explanation-box--wrong {
+  background: rgba(198, 40, 40, 0.15);
+  border: 1px solid #EF5350;
+}
+
+.explanation-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-gold-light);
+}
+
+.explanation-text {
+  font-size: 0.88rem;
+  color: var(--color-cream);
+  line-height: 1.4;
+}
+
+.explanation-page {
+  font-size: 0.75rem;
+  color: var(--color-gold);
+}
+
+.explanation-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+/* Lucky Cards Panel */
+.dynamic-panel--lucky {
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.dynamic-panel--lucky h3 {
+  font-size: 1.3rem;
+  color: var(--color-gold-light);
+}
+
+.lucky-cards-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 10px 0;
+}
+
+/* Crisis Event Panel */
+.dynamic-panel--crisis {
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.crisis-icon-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(198, 40, 40, 0.2);
+  border: 2px solid #FF5252;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(255, 82, 82, 0.5);
+}
+
+.crisis-options {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+@media (max-width: 1200px) {
+  .gameplay-main {
+    flex-direction: column;
+  }
+  .gameplay-wheel-section {
+    flex: none;
+    width: 100%;
+  }
+}

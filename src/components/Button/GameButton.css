@@ -1,0 +1,99 @@
+.game-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-cream-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition-fast);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.game-button__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-button__shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: 0.5s;
+  pointer-events: none;
+}
+
+.game-button:hover .game-button__shine {
+  left: 150%;
+}
+
+/* Sizes */
+.game-button--sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.game-button--md {
+  padding: 12px 28px;
+  font-size: 1rem;
+}
+
+.game-button--lg {
+  padding: 16px 40px;
+  font-size: 1.15rem;
+}
+
+/* Variants */
+.game-button--primary {
+  background: linear-gradient(180deg, #A81B1B 0%, #5C0606 100%);
+  border: var(--border-gold-thick);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 215, 0, 0.4);
+}
+
+.game-button--primary:hover {
+  border-color: #FFF;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.game-button--secondary {
+  background: linear-gradient(180deg, #1C2541 0%, #0B132B 100%);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+}
+
+.game-button--secondary:hover {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 15px rgba(28, 37, 65, 0.8);
+}
+
+.game-button--danger {
+  background: linear-gradient(180deg, #D32F2F 0%, #8B0000 100%);
+  border: 1px solid #FF5252;
+}
+
+.game-button--success {
+  background: linear-gradient(180deg, #388E3C 0%, #1B5E20 100%);
+  border: 1px solid #66BB6A;
+}
+
+.game-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(80%);
+}

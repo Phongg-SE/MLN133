@@ -1,0 +1,103 @@
+.game-over-screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(circle at 50% 50%, #400505 0%, #080305 80%, #000 100%);
+  overflow: hidden;
+}
+
+.game-over-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 0 100px rgba(183, 28, 28, 0.8);
+  pointer-events: none;
+  animation: pulseRedVignette 3s ease-in-out infinite;
+}
+
+@keyframes pulseRedVignette {
+  0% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.5; }
+}
+
+.game-over-card {
+  width: 100%;
+  max-width: 520px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  border: 2px solid #B71C1C;
+  background: linear-gradient(180deg, rgba(30, 10, 15, 0.95) 0%, rgba(10, 5, 8, 0.98) 100%);
+  box-shadow: 0 0 50px rgba(183, 28, 28, 0.6);
+  z-index: 10;
+  text-align: center;
+}
+
+.game-over-icon-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(183, 28, 28, 0.2);
+  border: 2px solid #FF5252;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(255, 82, 82, 0.5);
+}
+
+.game-over-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.game-over-subtitle {
+  font-size: 0.85rem;
+  color: #FF8A80;
+  letter-spacing: 0.15em;
+}
+
+.game-over-quote-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 82, 82, 0.4);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  margin: 6px 0;
+}
+
+.quote-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.quote-text {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(245, 230, 200, 0.9);
+  line-height: 1.5;
+}
+
+.game-over-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.game-over-actions .game-button {
+  width: 100%;
+}

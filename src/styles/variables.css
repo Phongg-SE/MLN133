@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&display=swap');
+
+:root {
+  /* Primary Color Tokens */
+  --color-primary-dark: #5C0606;
+  --color-primary-red: #8B0000;
+  --color-primary-bright: #B71C1C;
+  --color-gold: #D4AF37;
+  --color-gold-light: #FFD700;
+  --color-gold-glow: rgba(212, 175, 55, 0.4);
+  --color-cream: #F5E6C8;
+  --color-cream-light: #FFF8DC;
+  
+  /* Background / Surface Tokens */
+  --color-bg-darkest: #070B19;
+  --color-bg-navy: #0B132B;
+  --color-bg-card: rgba(15, 23, 42, 0.85);
+  --color-bg-panel: rgba(20, 10, 15, 0.88);
+  --color-dark-brown: #2C1A1D;
+
+  /* Status Colors */
+  --color-success: #2E7D32;
+  --color-success-glow: rgba(46, 125, 50, 0.5);
+  --color-danger: #C62828;
+  --color-danger-glow: rgba(198, 40, 40, 0.5);
+  --color-info: #1565C0;
+
+  /* Typography Fonts */
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-number: 'Orbitron', monospace;
+
+  /* Glassmorphism & Borders */
+  --border-gold-thin: 1px solid rgba(212, 175, 55, 0.4);
+  --border-gold-thick: 2px solid rgba(212, 175, 55, 0.8);
+  --border-gold-glowing: 2px solid var(--color-gold-light);
+  --border-panel: 1px solid rgba(245, 230, 200, 0.15);
+
+  /* Shadows */
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-glow-gold: 0 0 20px rgba(212, 175, 55, 0.5);
+  --shadow-glow-red: 0 0 25px rgba(183, 28, 28, 0.6);
+  --shadow-hud: 0 8px 32px rgba(0, 0, 0, 0.8);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-slow: 0.5s ease-in-out;
+}
