@@ -64,16 +64,23 @@
   pointer-events: none;
 }
 
-/* Map Node */
+/* Map Node Outer Container - Fixed Absolute Position */
 .map-node {
   position: absolute;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
   cursor: pointer;
   z-index: 10;
+}
+
+.map-node__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease;
 }
 
 .map-node__badge {
@@ -101,7 +108,7 @@
 }
 
 .map-node--locked {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
@@ -146,16 +153,18 @@
   margin-top: 2px;
 }
 
-/* Node Tooltip */
+/* Node Tooltip Fixed Hover - No Mouse Interaction Jitter */
 .map-node__tooltip {
   position: absolute;
-  bottom: 120%;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
   width: 220px;
   padding: 10px 14px;
   text-align: center;
   opacity: 0;
   visibility: hidden;
-  transition: 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
   pointer-events: none;
   z-index: 50;
   border-color: var(--color-gold);
@@ -186,4 +195,5 @@
 .map-node:hover .map-node__tooltip {
   opacity: 1;
   visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
 }

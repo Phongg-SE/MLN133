@@ -140,47 +140,51 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
           const stars = levelStars[node.level] || (isCompleted ? 3 : 0);
 
           return (
-            <motion.div
+            <div
               key={node.level}
               className={`map-node ${isUnlocked ? 'map-node--unlocked' : 'map-node--locked'} ${isCompleted ? 'map-node--completed' : ''}`}
               style={{ left: `${node.x}%`, top: `${node.y}%` }}
-              whileHover={{ scale: isUnlocked ? 1.15 : 1 }}
-              whileTap={{ scale: isUnlocked ? 0.95 : 1 }}
               onClick={() => {
                 if (!isUnlocked) return;
                 AudioService.playClick();
                 onSelectLevel(node.level);
               }}
             >
-              {/* Node Icon/Badge */}
-              <div className="map-node__badge">
-                {isCompleted ? (
-                  <Flag size={22} color="#4CAF50" />
-                ) : isUnlocked ? (
-                  <MapPin size={22} color="#FFD700" />
-                ) : (
-                  <Lock size={20} color="#78909C" />
-                )}
-                <span className="map-node__number font-number">{node.level}</span>
-              </div>
+              <motion.div
+                className="map-node__inner"
+                whileHover={{ scale: isUnlocked ? 1.15 : 1 }}
+                whileTap={{ scale: isUnlocked ? 0.95 : 1 }}
+              >
+                {/* Node Icon/Badge */}
+                <div className="map-node__badge">
+                  {isCompleted ? (
+                    <Flag size={22} color="#4CAF50" />
+                  ) : isUnlocked ? (
+                    <MapPin size={22} color="#FFD700" />
+                  ) : (
+                    <Lock size={20} color="#78909C" />
+                  )}
+                  <span className="map-node__number font-number">{node.level}</span>
+                </div>
 
-              {/* Node Label */}
-              <div className="map-node__info">
-                <span className="map-node__name">{node.name}</span>
-                {/* Stars Rating */}
-                {isUnlocked && (
-                  <div className="map-node__stars">
-                    {[1, 2, 3].map((starIdx) => (
-                      <Star
-                        key={starIdx}
-                        size={12}
-                        color={starIdx <= stars ? '#FFD700' : 'rgba(255, 255, 255, 0.2)'}
-                        fill={starIdx <= stars ? '#FFD700' : 'none'}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
+                {/* Node Label */}
+                <div className="map-node__info">
+                  <span className="map-node__name">{node.name}</span>
+                  {/* Stars Rating */}
+                  {isUnlocked && (
+                    <div className="map-node__stars">
+                      {[1, 2, 3].map((starIdx) => (
+                        <Star
+                          key={starIdx}
+                          size={12}
+                          color={starIdx <= stars ? '#FFD700' : 'rgba(255, 255, 255, 0.2)'}
+                          fill={starIdx <= stars ? '#FFD700' : 'none'}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
 
               {/* Hover Tooltip */}
               <div className="map-node__tooltip glass-panel">
@@ -194,7 +198,7 @@ export const LevelSelectScreen: React.FC<LevelSelectScreenProps> = ({
                     : '🔒 CHƯA MỞ KHÓA'}
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>
