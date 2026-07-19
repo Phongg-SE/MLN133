@@ -14,7 +14,7 @@ import { Sparkles, CheckCircle2, XCircle, AlertTriangle, ArrowRight, Eye, Shield
 import './GameplayScreen.css';
 
 export interface GameplayScreenProps {
-  level: number;
+  level: number; // 1 to 7
   onVictory: (stats: { xpGained: number; hpLeft: number; stars: number }) => void;
   onGameOver: () => void;
   onHomeClick: () => void;
@@ -158,10 +158,10 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
   isAudioMuted,
   onToggleAudio,
 }) => {
-  // GDD Level Target XP & Timer Configuration
-  const levelMeta = QuestionService.getLevelMetadata(level);
-  const maxXp = levelMeta.targetXp; // 300 (Lvl 1), 600 (Lvl 2), 1000 (Lvl 3)
-  const baseTimer = levelMeta.timerPerQ * 5; // Total countdown per level session
+  // Get Chapter Metadata
+  const chapterMeta = QuestionService.getChapterMeta(level);
+  const maxXp = chapterMeta.targetXp;
+  const baseTimer = chapterMeta.timerPerQ * 4; // Total countdown time for session
 
   // Game Stats
   const [hp, setHp] = useState<number>(100);
@@ -198,7 +198,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
   // Cards State
   const [flippedCardIdx, setFlippedCardIdx] = useState<number | null>(null);
 
-  // Inventory & Card Active Statuses
+  // Inventory State
   const [inventory, setInventory] = useState<InventoryItem[]>(DEFAULT_INVENTORY_ITEMS);
   const [active5050, setActive5050] = useState<boolean>(false);
   const [activeDoubleXp, setActiveDoubleXp] = useState<boolean>(false);
@@ -256,7 +256,6 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
     if (result.isCorrect) {
       AudioService.playCorrect();
-      // GDD Card "Liên minh Công - Nông": xpMultiplier = 2 (+100 XP or +200 XP)
       const xpEarned = activeDoubleXp ? 100 : 50;
       const newXp = xp + xpEarned;
       setXp(newXp);
@@ -270,10 +269,9 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
       }
     } else {
       AudioService.playWrong();
-      // GDD Card "Kiên định tư tưởng": Passive Shield blocks HP loss!
+      // Check Passive Shield Card
       const kienDinhCard = inventory.find((item) => item.id === 'kienDinhTuTuong');
       if (kienDinhCard && kienDinhCard.count > 0) {
-        // Consume 1 passive shield card to block HP loss (HP -= 0)
         setInventory((prev) =>
           prev.map((item) =>
             item.id === 'kienDinhTuTuong' ? { ...item, count: item.count - 1 } : item
@@ -339,12 +337,11 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
       }
     } else {
       AudioService.playWrong();
-      // Check passive shield for crisis penalty
       const kienDinhCard = inventory.find((item) => item.id === 'kienDinhTuTuong');
       let actualHpDelta = choiceData.hpDelta;
 
       if (kienDinhCard && kienDinhCard.count > 0 && actualHpDelta < 0) {
-        actualHpDelta = 0; // Block HP loss
+        actualHpDelta = 0;
         setInventory((prev) =>
           prev.map((item) =>
             item.id === 'kienDinhTuTuong' ? { ...item, count: item.count - 1 } : item
@@ -374,10 +371,8 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
     if (itemId === 'giacNgoLyLuan' && panelState === 'question' && currentQuestion) {
       setActive5050(true);
     } else if (itemId === 'keHoachHoa') {
-      // GDD Card "Kế hoạch hóa tập trung": timer += 10s
       setTimer((prev) => prev + 10);
     } else if (itemId === 'lienMinhCongNong') {
-      // GDD Card "Liên minh Công - Nông": xpMultiplier = 2
       setActiveDoubleXp(true);
     }
 
@@ -399,7 +394,7 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
         timer={timer}
         maxTimer={baseTimer}
         level={level}
-        chapterTitle={levelMeta.name}
+        chapterTitle={`${chapterMeta.stageName} — ${chapterMeta.chapterTitle}`}
         score={score}
         onHomeClick={onHomeClick}
         onPauseClick={() => setIsPaused(true)}
@@ -432,9 +427,9 @@ export const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 <div className="dynamic-panel__icon-ring">
                   <Sparkles size={48} color="#FFD700" />
                 </div>
-                <h2>CHÈO LÁI ĐÔNG DƯƠNG QUỐC — MÀN {level}</h2>
+                <h2>{chapterMeta.chapterTitle}</h2>
                 <p>
-                  Nhấn <strong>QUAY BIỆN CHỨNG</strong> phía bên trái để kích hoạt các sự kiện lý luận và tích lũy đủ <strong>{maxXp} XP Điểm Giác Ngộ</strong> để chiến thắng Màn {level}!
+                  {chapterMeta.subTitle}. Nhấn <strong>QUAY BIỆN CHỨNG</strong> để trả lời các câu hỏi trắc nghiệm của Chương này và tích lũy đủ <strong>{maxXp} XP</strong>!
                 </p>
                 {activeDoubleXp && <div className="active-buff-badge">⚡ LIÊN MINH CÔNG - NÔNG: NHÂN 2 XP (x2) ĐANG KÍCH HOẠT</div>}
               </motion.div>

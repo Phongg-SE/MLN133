@@ -14,7 +14,7 @@ export type ScreenState = 'splash' | 'menu' | 'levelSelect' | 'gameplay' | 'vict
 export const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenState>('splash');
   const [selectedLevel, setSelectedLevel] = useState<number>(1);
-  const [completedLevels, setCompletedLevels] = useState<number[]>([1]); // level 1 unlocked by default
+  const [completedLevels, setCompletedLevels] = useState<number[]>([1]); // chapter 1 unlocked by default
   const [levelStars, setLevelStars] = useState<Record<number, number>>({ 1: 3 });
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
 
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
     hpLeft: number;
     stars: number;
   }>({
-    xpGained: 300,
+    xpGained: 150,
     hpLeft: 80,
     stars: 3,
   });
@@ -94,7 +94,7 @@ export const App: React.FC = () => {
         <VictoryScreen
           level={selectedLevel}
           stats={victoryStats}
-          onNextLevel={() => handleSelectLevel(Math.min(selectedLevel + 1, 3))}
+          onNextLevel={() => handleSelectLevel(Math.min(selectedLevel + 1, 7))}
           onRetry={() => setCurrentScreen('gameplay')}
           onHomeClick={() => setCurrentScreen('menu')}
         />
